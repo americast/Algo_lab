@@ -4,6 +4,8 @@
 #include<string.h>
 using namespace std;
 
+int count_global=0;
+
 int isvalid(char A[19],int n)
 {
     int count=0;
@@ -18,7 +20,7 @@ int isvalid(char A[19],int n)
     else return 0;
 }
 
-int exhsearch_iter(int n)
+int exhsearch(int n)
 {
     char str[n+1];
     for (int i=0;i<n;i++)
@@ -34,41 +36,40 @@ int exhsearch_iter(int n)
                 str[j]='a';
             else break;
         }
-        // cout<<str<<endl;
+        //cout<<str<<endl;
         if (isvalid(str,n)) count++;
     }
     return count;
     // cout<<count<<endl;
 }
 
-void exhsearch_rec(char str[19], int &count_global, int n)
+void exhsearch_rec(char str[19], int n)
 {
     int counthere=0;
     for (;counthere<n;counthere++)
       if(str[counthere]=='\0') break;
     if (counthere==n)
     {
-      cout<<str<<endl;
+      // cout<<str<<endl;
       if(isvalid(str,n)) count_global++;
       return;
     }
     char new_str[n+1];
     str[counthere]='a';
     strcpy(new_str,str);
-    exhsearch_rec(new_str, count_global, n);
+    exhsearch_rec(new_str, n);
     str[counthere]='b';
     strcpy(new_str,str);
-    exhsearch_rec(new_str, count_global, n);
+    exhsearch_rec(new_str, n);
     str[counthere]='c';
     strcpy(new_str,str);
-    exhsearch_rec(new_str, count_global, n);
+    exhsearch_rec(new_str, n);
 }
 
 
 int main()
 {
     int n;
-    clock_t c1, c2;
     while(1)
     {
         cout<<"How many letters? ";
@@ -80,17 +81,13 @@ int main()
         else
             break;
     }
-    c1 = clock();
-    int count = exhsearch_iter(n);
-    c2 = clock();
-    cout<<"With iteration: "<<count<<" and time: "<<(double)(c2-c1)/CLOCKS_PER_SEC<<endl;
-    int count_global=0;
+    int count = exhsearch(n);
+    cout<<"With iteration: "<<count<<endl;
+    count_global=0;
     char str[n+1];
     str[0]='\0';
-    c1 = clock();
-    exhsearch_rec(str, count_global, n);
-    c2 = clock();
-    cout<<"With recursion: "<<count_global<<" and time: "<<(double)(c2-c1)/CLOCKS_PER_SEC<<endl;
+    exhsearch_rec(str,n);
+    cout<<"With recursion: "<<count_global<<endl;
 }
 
 
