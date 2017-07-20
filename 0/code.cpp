@@ -96,7 +96,7 @@ int main()
     c1=clock();
     int count = exhsearch(n);
     c2=clock();
-    cout<<"With iteration: "<<count<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
+    cout<<"With iteration:\t"<<count<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
     char *str;
     int *ccc= new int;
     str=(char *) malloc(19*sizeof(char));
@@ -104,11 +104,11 @@ int main()
     c1=clock();
     exhsearch_rec(str,n, ccc);
     c2=clock();
-    cout<<"With recursion: "<<*ccc<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
+    cout<<"With recursion:\t"<<*ccc<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
     c1=clock();
     count = formula(n);
     c2=clock();
-    cout<<"With formula: "<<count<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
+    cout<<"With formula:\t"<<count<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
 }
 
 
