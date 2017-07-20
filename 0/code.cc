@@ -1,10 +1,9 @@
 #include<iostream>
 #include<math.h>
 #include<time.h>
-#include<string.h>
+#include<stdlib.h>
 using namespace std;
 
-int count_global=0;
 
 int isvalid(char A[19],int n)
 {
@@ -43,7 +42,7 @@ int exhsearch(int n)
     // cout<<count<<endl;
 }
 
-void exhsearch_rec(char str[19], int n)
+void exhsearch_rec(char str[19], int n, int *ccc)
 {
     int counthere=0;
     for (;counthere<n;counthere++)
@@ -51,19 +50,19 @@ void exhsearch_rec(char str[19], int n)
     if (counthere==n)
     {
       // cout<<str<<endl;
-      if(isvalid(str,n)) count_global++;
+      if(isvalid(str,n)) *ccc+=1;
       return;
     }
     char new_str[n+1];
     str[counthere]='a';
-    strcpy(new_str,str);
-    exhsearch_rec(new_str, n);
+    str[counthere+1]='\0';
+    exhsearch_rec(str, n, ccc);
     str[counthere]='b';
-    strcpy(new_str,str);
-    exhsearch_rec(new_str, n);
+    str[counthere+1]='\0';
+    exhsearch_rec(str, n, ccc);
     str[counthere]='c';
-    strcpy(new_str,str);
-    exhsearch_rec(new_str, n);
+    str[counthere+1]='\0';
+    exhsearch_rec(str, n, ccc);
 }
 
 
@@ -81,13 +80,19 @@ int main()
         else
             break;
     }
+    clock_t c1, c2;
+    c1=clock();
     int count = exhsearch(n);
-    cout<<"With iteration: "<<count<<endl;
-    count_global=0;
-    char str[n+1];
+    c2=clock();
+    cout<<"With iteration: "<<count<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
+    char *str;
+    int *ccc= new int;
+    str=(char *) malloc(19*sizeof(char));
     str[0]='\0';
-    exhsearch_rec(str,n);
-    cout<<"With recursion: "<<count_global<<endl;
+    c1=clock();
+    exhsearch_rec(str,n, ccc);
+    c2=clock();
+    cout<<"With recursion: "<<*ccc<<" and time: "<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<endl;
 }
 
 
