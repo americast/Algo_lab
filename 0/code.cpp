@@ -53,7 +53,6 @@ void exhsearch_rec(char str[19], int n, int *ccc)
       if(isvalid(str,n)) *ccc+=1;
       return;
     }
-    char new_str[n+1];
     str[counthere]='a';
     str[counthere+1]='\0';
     exhsearch_rec(str, n, ccc);
