@@ -4,6 +4,7 @@
   Description: Greedy algorithms
 */
 
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -39,23 +40,22 @@ void merge(int a[1000], int token_id[1000], int i1,int j1,int i2,int j2)
 		a[i]=temp[j];
 		token_id[i]=temp2[j];
 	}
-//Transfer elements from temp[] back to a[]
 }
+
 /* Name: mergesort()
   Input: arrays to be sorted, start and end index
   Output: none
   Description: Implementation of merge sort.
 */
+
+
 void mergesort(int a[1000],int token_id[1000], int i,int j)
 {
 	int mid;
 	if(i<j) {
 		mid=(i+j)/2;
-	/* left recursion */
 		mergesort(a,token_id, i,mid);
-	/* right recursion */
 		mergesort(a,token_id, mid+1,j);
-	/* merging of two sorted sub-arrays */
 		merge(a,token_id, i,mid,mid+1,j);
 	}
 }
@@ -129,10 +129,10 @@ int* schedule2(int n, int p, int schedules[1000][1000], int times[1000], int tok
 	for (int i=0;i<n;i++)
 		times2[i]=times[i];
 	mergesort(times2,token_id,0,n-1);
-	// for (int i=0;i<n;i++)
-	// 	cout<<"Times: "<<times[i]<<"\n";
-	// for (int i=0;i<n;i++)
-	// 	cout<<"Token_ids: "<<token_id[i]<<"\n";
+	for (int i=0;i<n;i++)
+		cout<<"Times: "<<times[i]<<"\n";
+	for (int i=0;i<n;i++)
+		cout<<"Token_ids: "<<token_id[i]<<"\n";
 	int *sum_of_time;		//p[i]=sum of times
 	sum_of_time=new int(p);
 	for (int i=0;i<p;i++)
@@ -145,7 +145,7 @@ int* schedule2(int n, int p, int schedules[1000][1000], int times[1000], int tok
 				{lowest_time=sum_of_time[j]; lowest_j=j;}
 		schedules[lowest_j][0]++;
 		schedules[lowest_j][schedules[lowest_j][0]]=token_id[i];
-		// cout<<"\n"<<token_id[i]<<"\n";
+		cout<<"\n"<<token_id[i]<<"\n";
 		sum_of_time[lowest_j]+=times[token_id[i]];
 	}
 	return sum_of_time;
@@ -155,21 +155,16 @@ int* schedule2(int n, int p, int schedules[1000][1000], int times[1000], int tok
   Input: n,p
   Output: <none>
   Description: This program divides the sorted token ids into mini batches, each batch
-  	having no of items = no of counters. Then, the best token for each counter is decided,.
-  	considering net wait time. It assumes that p is a constant. Hence, running time remain O(n)
+  	having no of items = no of counters. Then, the best token for each counter is decided.
+  	It assumes that p is a constant. Hence, running time remain O(n)
 */
 
 
 int* schedule3(int n, int p, int schedules[1000][1000], int times[1000], int token_id[1000])
 {
-	int *sum_of_time, *sum_of_waittime;		//p[i]=sum of times
-	sum_of_time=new int(p);
-	sum_of_waittime=new int(p);
+	int sum_of_time=new int(p);
 	for (int i=0;i<p;i++)
-	{
 		sum_of_time[i]=0;
-		sum_of_waittime[i]=0;
-	}
 	for (int i=0;i<n;i+=p)
 	{
 		int var_p=p;
@@ -186,23 +181,20 @@ int* schedule3(int n, int p, int schedules[1000][1000], int times[1000], int tok
 		int pos_will_choose[var_p];
 		for (int q=0;q<var_p;q++)
 		{
-			long lowest_time=sum_of_waittime[q]+time_here[0], lowest_r=0;
+			long lowest_time=sum_of_time[q]+time_here[0], lowest_r=0;
 			for (int r=1;r<var_p;r++)
-				if (sum_of_waittime[q]+time_here[r]<lowest_time)
-					{lowest_time=long(sum_of_waittime[q]+time_here[r]); lowest_r=r;}
+				if (sum_of_time[q]+time_here[r]<lowest_time)
+					{lowest_time=long(sum_of_time[q]+time_here[r]); lowest_r=r;}
 			pos_will_choose[q]=lowest_r;
-			// for (int i=0;i<var_p;i++)
-			// 	cout<<"pos "<<i<<" will choose "<<pos_will_choose[i]<<"\n";
-			time_here[lowest_r]=9999;
+			time_here[lowest_r]=99999;
 		}
 		for (int j=0;j<p;j++)
 		{
 			int curr_counter=j, chosen_token=pos_will_choose[j];
 			schedules[curr_counter][0]++;
 			schedules[curr_counter][schedules[curr_counter][0]]=token_id[i+chosen_token];
-			// cout<<"\n"<<token_id[i+chosen_token]<<"\n";
+			cout<<"\n"<<token_id[i+chosen_token]<<"\n";
 			sum_of_time[curr_counter]+=times[token_id[i+chosen_token]];
-			sum_of_waittime[curr_counter]+=sum_of_time[curr_counter];
 		}
 	}
 	return sum_of_time;
