@@ -1,9 +1,21 @@
+/* Name: code.cpp
+  Creator: Sayan Sinha (sayan.sinha@iitkgp.ac.in)
+  Date: August 10, 2017
+  Description: Dynamic programming
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
 extern int* registerme ( );
 extern int makemove1 ( int );
 extern int makemove2 ( int );
+
+/* Name: dptable
+  Input: n, k, p array
+  Output: T array
+  Description: Generate table using DP
+*/
 
 int* dptable(int n, int k, int *p)
 {
@@ -32,30 +44,59 @@ void playgame1(int *T, int i, int *p, int k)
 {
 	while(i>0)
 	{
-		// cout<<"Now "<<i<"\n";
 		if (T[i]>=0)
 			i=makemove1(T[i]);
 		else
 		{
-			srand(time(NULL));
 			int j=rand()%k;
 			i=makemove1(j);
 		}
 	}
 }
 
+/* Name: playgame2
+  Input: k, p array
+  Output: <none>
+  Description: Same value repeated for every start_value+end+value
+*/
+
+void playgame2(int i, int *p, int k)
+{
+	int start_val=p[0], end_val=start_val+k-1;
+	while(i>0)
+	{
+		int rem=(i%(start_val+end_val))-1;
+		if (rem<0) rem=end_val+start_val-1;
+		if (rem<start_val)
+		{
+			int j=rand()%k;
+			i=makemove2(j);
+		}
+		else
+		{
+			if (rem>=end_val)
+				i=makemove2(k-1);
+			else
+			{
+				i=makemove2(rem-start_val);
+			}
+		}
+	}
+
+}
+
+
 int main()
 {
+	srand(time(NULL));
 	int* A, n, k,*p;
 	A = registerme();
 	n = A[0];
 	k = A[1];
 	p = A + 2;
 	int *T = dptable(n,k,p);
-	// cout<<"\n\nT: ";
-	// for (int i=0;i<=n;i++)
-	// 	cout<<i<<":"<<T[i]<<"\t";
 	cout<<endl;
 
 	playgame1(T, n, p,k);
+	playgame2(n,p,k);
 }
