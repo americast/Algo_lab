@@ -1,0 +1,1 @@
+g++ code.cpp blackbox3.o && ./a.out
