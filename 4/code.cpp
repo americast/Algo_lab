@@ -45,6 +45,32 @@ int lefttilt(bintree T)
 	return left_height+1;
 }
 
+void updatekeys(bintree T, int *arr, int curr, int h)
+{
+	if (T==NULL) return;
+	if (curr<2*h)
+		arr[curr]=T->key;
+	else
+	{
+		for (int i=0;i<h-1;i++)
+			arr[i]=arr[i+1];
+		arr[h-1]=T->key;
+	}
+	int mod=T->key % h;
+	if (mod>curr)
+		T->key=arr[0];
+	else
+	{
+		if (curr==2*h)
+			T->key = arr[curr-mod-1];
+		else
+			T->key = arr[curr-mod];
+	}		
+	curr++;
+	updatekeys(T->L,arr,curr,h);
+	updatekeys(T->R,arr,curr,h);
+}
+
 void printtree(bintree T, int indent)
 {
 	for (int i=0;i<indent;i++)
@@ -68,7 +94,12 @@ int main()
 	cout<<"+++ Initial tree\n";
 	printtree(T,0);
 	int h = lefttilt(T);
-	cout<<"+++ Tree after left-tilting\n";
+	cout<<"\n+++ Tree after left-tilting\n";
 	printtree(T,0);
-	cout<<"+++ The height of the tree is "<<h<<"\n";
+	cout<<"\n+++ The height of the tree is "<<h<<"\n";
+	int *arr, curr=0;
+	arr=(int*) malloc(sizeof(int)*2*h);
+	updatekeys(T,arr,curr,h);
+	cout<<"\n+++ Tree after key update\n";
+	printtree(T,0);
 }
