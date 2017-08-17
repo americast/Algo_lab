@@ -29,6 +29,22 @@ bintree buildtree ( int n )
 	return T;
 }
 
+int lefttilt(bintree T)
+{
+	if (T==NULL)
+		return -1;
+	int left_height = lefttilt(T->L);
+	int right_height = lefttilt(T->R);
+	if (left_height<right_height)
+	{
+		bintree lt = T->L;
+		T->L=T->R;
+		T->R=lt;
+		return right_height+1;
+	}
+	return left_height+1;
+}
+
 void printtree(bintree T, int indent)
 {
 	for (int i=0;i<indent;i++)
@@ -51,4 +67,8 @@ int main()
 	bintree T = buildtree(n);
 	cout<<"+++ Initial tree\n";
 	printtree(T,0);
+	int h = lefttilt(T);
+	cout<<"+++ Tree after left-tilting\n";
+	printtree(T,0);
+	cout<<"+++ The height of the tree is "<<h<<"\n";
 }
