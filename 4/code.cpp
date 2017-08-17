@@ -1,3 +1,9 @@
+/* Name: code.cpp
+  Creator: Sayan Sinha (sayan.sinha@iitkgp.ac.in)
+  Date: August 17, 2017
+  Description: Binary trees
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -9,7 +15,13 @@ struct tnode
 
 typedef tnode *bintree;
 
-bintree buildtree ( int n )
+/* Name: buildtree
+  Input: n (no of elements)
+  Output: T (pointer)
+  Description: Generate binary tree
+*/
+
+bintree buildtree (int n)
 {
 	bintree T;
 	int n1, n2;
@@ -29,6 +41,12 @@ bintree buildtree ( int n )
 	return T;
 }
 
+/* Name: lefttilt
+  Input: T (pointer)
+  Output: h (height)
+  Description: Left tilt a binary tree
+*/
+
 int lefttilt(bintree T)
 {
 	if (T==NULL)
@@ -40,10 +58,19 @@ int lefttilt(bintree T)
 		bintree lt = T->L;
 		T->L=T->R;
 		T->R=lt;
-		return right_height+1;
+		return right_height+1;			//return the greater height + 1
 	}
 	return left_height+1;
 }
+
+
+/* Name: Update keys
+  Input: T (pointer), arr (pointer), curr (current position in array), h (height)
+  Output: (void)
+  Description: Update keys pseudo simultaneosly using DP by storing maximum last 2h parents in an array.
+  	All nodes are visited once, so O(n) time. Extra space used: 2h = O(h)
+*/
+
 
 void updatekeys(bintree T, int *arr, int curr, int h)
 {
@@ -61,7 +88,7 @@ void updatekeys(bintree T, int *arr, int curr, int h)
 		T->key=arr[0];
 	else
 	{
-		if (curr==2*h)
+		if (curr==2*h)				//curr goes beyond range at h
 			T->key = arr[curr-mod-1];
 		else
 			T->key = arr[curr-mod];
@@ -98,7 +125,7 @@ int main()
 	printtree(T,0);
 	cout<<"\n+++ The height of the tree is "<<h<<"\n";
 	int *arr, curr=0;
-	arr=(int*) malloc(sizeof(int)*2*h);
+	arr=(int*) malloc(sizeof(int)*2*h);			//dynamically create array of size 2h
 	updatekeys(T,arr,curr,h);
 	cout<<"\n+++ Tree after key update\n";
 	printtree(T,0);
