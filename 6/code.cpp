@@ -64,6 +64,7 @@ void printlist(bintree *T,int n)
 		cout<<here->key<<"\t";
 		here = here->R;
 	}
+	cout<<"\n";
 }
 
 bintree* left_rotate_tree(bintree *T)
@@ -151,6 +152,29 @@ bintree* tree2list(bintree *T)
 	return smallest;
 }
 
+bintree* list2tree(bintree *T, int n)
+{
+	if (n==1)
+	{
+		T->L = NULL;
+		T->R = NULL;
+		return T;
+	}
+	if (n<=0)
+		return NULL;
+	int centre = n/2;
+	bintree *here = T;
+	for (int i=1; i<=centre; i++)
+		here = here->R;
+	// bintree *there = here;
+	cout<<"here: "<<here->key<<"\n";
+	here->L = list2tree(T, centre);
+	// here = there;
+	// cout<<"one r ";
+	here->R = list2tree(here->R, n-centre-1);
+	cout<<"there: "<<here->key<<"\n";
+	return here;
+}
 
 int main()
 {
@@ -166,4 +190,8 @@ int main()
 	T = tree2list(T);
 	cout<<"\n+++ Linked list\n";
 	printlist(T,n);
+	T = list2tree(T,n);
+	cout<<endl<<endl;
+	cout<<"\n+++ Balanced tree\n";
+	printtree(T);
 }
