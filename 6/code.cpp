@@ -56,6 +56,21 @@ void printtree(bintree *T, int indent)
 	printtree(T->R, indent+1);
 }
 
+bintree* left_rotate_tree(bintree *T)
+{
+	bintree *right = T->R;
+	T->R = T->R->L;
+	right->L = T;
+	return right;
+}
+
+bintree* right_rotate_tree(bintree *T)
+{
+	bintree *left = T->L;
+	T->L = T->L->R;
+	left->R = T;
+	return left;
+}
 
 int main()
 {
@@ -67,5 +82,8 @@ int main()
 	T->L = T->R = NULL;
 	buildtree(T,n,1);
 	cout<<"+++ Initial tree\n";
+	printtree(T,0);
+	T = right_rotate_tree(T);
+	cout<<"\n+++ one step right rotate tree\n";
 	printtree(T,0);
 }
