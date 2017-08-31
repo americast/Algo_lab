@@ -1,3 +1,8 @@
+/* Name: code.cpp
+  Creator: Sayan Sinha (sayan.sinha@iitkgp.ac.in)
+  Date: August 31, 2017
+  Description: Binary Search trees
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -7,7 +12,12 @@ struct bintree
 	bintree *L, *R;
 };
 
-// typedef tnode *bintree;
+/* Name: buildtree
+  Input: *T, n, net_n (no of elements)
+  Output: T (pointer)
+  Description: Generate binary tree recursively. T takes in already allocated memory from main()
+  	net_n = total no of elements to be taken and n = no of elements taken as input till now.
+*/
 
 void buildtree (bintree *T, int n, int net_n)
 {
@@ -42,6 +52,12 @@ void buildtree (bintree *T, int n, int net_n)
 		buildtree(root,n,net_n);
 }
 
+/* Name: printtree
+  Input: *T
+  Output: (none)
+  Description: Print the tree by going to the left most node first, recursively.
+*/
+
 void printtree(bintree *T, int indent=0)
 {
 	if (T==NULL)
@@ -51,10 +67,15 @@ void printtree(bintree *T, int indent=0)
 	T = root;
 	for (int i=0;i<indent;i++)
 		cout<<"\t";
-	// cout<<"+-- ";
 	cout<<T->key<<"\n";
 	printtree(T->R, indent+1);
 }
+
+/* Name: printlist
+  Input: *T, n
+  Output: (none)
+  Description: Print the list by going to the right pointer one by one, till no of printed elements is n.
+*/
 
 void printlist(bintree *T,int n)
 {
@@ -64,8 +85,13 @@ void printlist(bintree *T,int n)
 		cout<<here->key<<"\t";
 		here = here->R;
 	}
-	cout<<"\n";
 }
+
+/* Name: left_rotate_tree
+  Input: *T
+  Output: right
+  Description: Left-rotate the tree and return the new root.
+*/
 
 bintree* left_rotate_tree(bintree *T)
 {
@@ -75,6 +101,12 @@ bintree* left_rotate_tree(bintree *T)
 	return right;
 }
 
+/* Name: right_rotate_tree
+  Input: *T
+  Output: left
+  Description: Right-rotate the tree and return the new root.
+*/
+
 bintree* right_rotate_tree(bintree *T)
 {
 	bintree *left = T->L;
@@ -83,6 +115,12 @@ bintree* right_rotate_tree(bintree *T)
 	return left;
 }
 
+/* Name: tree2list
+  Input: *T
+  Output: smallest
+  Description: Convert the tree to a sorted list and return a pointer to the smallest value.
+*/
+
 bintree* tree2list(bintree *T)
 {
 	bintree *here = T;
@@ -90,8 +128,6 @@ bintree* tree2list(bintree *T)
 	{
 		bintree *there = here;
 		here = here->L;
-		// cout<<"--\n";
-		// cout<<"Key here: "<<here->key<<endl;
 		if (here->L == NULL && here->R == NULL)
 			break;
 		if (here->R != NULL)
@@ -104,9 +140,6 @@ bintree* tree2list(bintree *T)
 			}
 		}
 		there -> L = here;
-		// bintree *there = T;
-		// cout<<"Key there: "<<T->L->key<<endl<<(T ==here)<<endl;
-		// printtree(T,0);
 	}
 	here = T;
 	while(1)
@@ -147,10 +180,14 @@ bintree* tree2list(bintree *T)
 		if (here->R == NULL)
 			break;
 	}
-	// printtree(T,0);
-	// cout<<"Key: "<<smallest->key<<endl;
 	return smallest;
 }
+
+/* Name: list2tree
+  Input: *T
+  Output: here
+  Description: Convert the list to an AVL tree and return the root.
+*/
 
 bintree* list2tree(bintree *T, int n)
 {
@@ -166,13 +203,8 @@ bintree* list2tree(bintree *T, int n)
 	bintree *here = T;
 	for (int i=1; i<=centre; i++)
 		here = here->R;
-	// bintree *there = here;
-	cout<<"here: "<<here->key<<"\n";
 	here->L = list2tree(T, centre);
-	// here = there;
-	// cout<<"one r ";
 	here->R = list2tree(here->R, n-centre-1);
-	cout<<"there: "<<here->key<<"\n";
 	return here;
 }
 
