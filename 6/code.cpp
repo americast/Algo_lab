@@ -42,7 +42,7 @@ void buildtree (bintree *T, int n, int net_n)
 		buildtree(root,n,net_n);
 }
 
-void printtree(bintree *T, int indent)
+void printtree(bintree *T, int indent=0)
 {
 	if (T==NULL)
 		return;
@@ -54,6 +54,16 @@ void printtree(bintree *T, int indent)
 	// cout<<"+-- ";
 	cout<<T->key<<"\n";
 	printtree(T->R, indent+1);
+}
+
+void printlist(bintree *T,int n)
+{
+	bintree *here = T;
+	while(n-->0)
+	{
+		cout<<here->key<<"\t";
+		here = here->R;
+	}
 }
 
 bintree* left_rotate_tree(bintree *T)
@@ -115,8 +125,32 @@ bintree* tree2list(bintree *T)
 		}
 		there->R = here;
 	}
-	return T;
+	here = T;
+	cout<<"+++ Flattened tree\n";
+	printtree(T);
+	while(1)
+	{
+		bintree *there = here;
+		here = here->L;
+		here->R = there;
+		if (here->L == NULL)
+			break;
+	}
+	bintree *smallest = here;
+	here = T;
+	while(1)
+	{
+		bintree *there = here;
+		here = here->R;
+		here->L = there;
+		if (here->R == NULL)
+			break;
+	}
+	// printtree(T,0);
+	// cout<<"Key: "<<smallest->key<<endl;
+	return smallest;
 }
+
 
 int main()
 {
@@ -128,8 +162,8 @@ int main()
 	T->L = T->R = NULL;
 	buildtree(T,n,1);
 	cout<<"+++ Initial tree\n";
-	printtree(T,0);
+	printtree(T);
 	T = tree2list(T);
-	cout<<"\n+++ fully rotate tree\n";
-	printtree(T,0);
+	cout<<"\n+++ Linked list\n";
+	printlist(T,n);
 }
