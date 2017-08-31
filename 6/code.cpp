@@ -14,7 +14,7 @@ void buildtree (bintree *T, int n, int net_n)
 	int num;
 	cin>>num;
 	bintree *prev, *root=T;
-	int flag=-1;	//-1 for left, 1 for right
+	int flag;	//-1 for left, 1 for right
 	while(1)
 	{
 		prev = T;
@@ -72,6 +72,52 @@ bintree* right_rotate_tree(bintree *T)
 	return left;
 }
 
+bintree* tree2list(bintree *T)
+{
+	bintree *here = T;
+	while(1)
+	{
+		bintree *there = here;
+		here = here->L;
+		// cout<<"--\n";
+		// cout<<"Key here: "<<here->key<<endl;
+		if (here->L == NULL && here->R == NULL)
+			break;
+		if (here->R != NULL)
+		{
+			while(1)
+			{
+				here = left_rotate_tree(here);
+				if (here->R == NULL)
+					break;
+			}
+		}
+		there -> L = here;
+		// bintree *there = T;
+		// cout<<"Key there: "<<T->L->key<<endl<<(T ==here)<<endl;
+		// printtree(T,0);
+	}
+	here = T;
+	while(1)
+	{
+		bintree *there = here;
+		here=here->R;
+		if (here->L == NULL && here->R == NULL)
+			break;
+		if (here->L != NULL)
+		{
+			while(1)
+			{
+				here = right_rotate_tree(here);
+				if (here->L == NULL)
+					break;
+			}
+		}
+		there->R = here;
+	}
+	return T;
+}
+
 int main()
 {
 	int n, num;
@@ -83,7 +129,7 @@ int main()
 	buildtree(T,n,1);
 	cout<<"+++ Initial tree\n";
 	printtree(T,0);
-	T = right_rotate_tree(T);
-	cout<<"\n+++ one step right rotate tree\n";
+	T = tree2list(T);
+	cout<<"\n+++ fully rotate tree\n";
 	printtree(T,0);
 }
