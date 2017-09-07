@@ -1,3 +1,9 @@
+/* Name: code.cpp
+  Creator: Sayan Sinha (sayan.sinha@iitkgp.ac.in)
+  Date: September 7, 2017
+  Description: Disjoint sets
+  Assumption: None of the rows or coloumns is 1
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,6 +12,12 @@ struct tree
 	tree *parent;
 	int weight;
 };
+
+/* Name: printlabyrinth
+  Input: H, V, m, n
+  Output: <none>
+  Description: Print the labyrinth
+*/
 
 void printlabyrinth(int **H, int **V,int m,int n)
 {
@@ -61,21 +73,15 @@ tree** initrooms(int m, int n)
 	return arr;
 }
 
-tree findroot(tree **arr, int i, int j)
+/* Name: findroot
+  Input: arr, i, j or arr
+  Output: tree*
+  Description: Overloaded functions to return root when required
+*/
+
+tree* findroot(tree **arr, int i, int j)
 {
 	tree *T = &(arr[i][j]);
-	while(1)
-	{
-		if (T->parent == T)
-			return *T;
-		else
-			T = T->parent;
-	}
-}
-
-tree* findroot(tree *T)
-{
-	// tree *T = &(arr[i][j]);
 	while(1)
 	{
 		if (T->parent == T)
@@ -84,6 +90,23 @@ tree* findroot(tree *T)
 			T = T->parent;
 	}
 }
+
+tree* findroot(tree *T)
+{
+	while(1)
+	{
+		if (T->parent == T)
+			return T;
+		else
+			T = T->parent;
+	}
+}
+
+/* Name: mergeregions
+  Input: x,y
+  Output: <none>
+  Description: merge regions x and y
+*/
 
 void mergeregions(tree *x, tree *y)
 {
@@ -101,9 +124,64 @@ void mergeregions(tree *x, tree *y)
 	}
 }
 
+/* Name: buildlabyrinth
+  Input: R, H, V, m, n
+  Output: count
+  Description: build it and return the no of times wall was removed
+*/
+
+int buildlabyrinth(tree **R, int **H, int **V, int m, int n)
+{
+	int flag = 0, count=0;
+	while(1)
+	{
+		if (count==m*n-1)
+			return count;
+		if (flag%2)
+		{
+			int m_here = rand() % (m-1);
+			int n_here = rand() % n;
+			int here = H[m_here][n_here];
+			if (here)
+			{
+				// tree *t1 = &(R[m_here][n_here]);
+				// tree *t2 = &(R[m_here+1][n_here]);
+				tree* root1 = findroot(R,m_here,n_here);
+				tree* root2 = findroot(R,m_here+1,n_here);
+				if (root1!=root2)
+				{
+					mergeregions(root1,root2);
+					H[m_here][n_here] = 0;
+					count++;
+				}
+			}
+		}
+		else
+		{
+			int m_here = rand() % m;
+			int n_here = rand() % (n-1);
+			int here = V[m_here][n_here];
+			if (here)
+			{
+				// tree *t1 = &(R[m_here][n_here]);
+				// tree *t2 = &(R[m_here][n_here+1]);
+				tree* root1 = findroot(R,m_here,n_here);
+				tree* root2 = findroot(R,m_here,n_here+1);
+				if (root1!=root2)
+				{
+					mergeregions(root1,root2);
+					V[m_here][n_here]=0;
+					count++;
+				}
+			}
+		}
+		flag++;
+	}
+}
 
 int main()
 {
+	srand (time(NULL));
 	int m,n;
 	cin>>m>>n;
 
@@ -127,8 +205,11 @@ int main()
 	for (int i=0;i<m;i++)
 		for (int j=0;j<n-1;j++)
 			V[i][j]=1;
-
+	cout<<"+++ Initial labyrinth\n";
 	printlabyrinth(H,V,m,n);
-	findroot(arr,1,1);
+	int count = buildlabyrinth(arr,H,V,m,n);
+	cout<<"+++ Labyrinth created after "<<count<<" wall removals\n";
+	cout<<"\n+++ Final labyrinth\n";
+	printlabyrinth(H,V,m,n);
 
 }
