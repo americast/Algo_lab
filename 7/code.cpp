@@ -73,6 +73,35 @@ tree findroot(tree **arr, int i, int j)
 	}
 }
 
+tree* findroot(tree *T)
+{
+	// tree *T = &(arr[i][j]);
+	while(1)
+	{
+		if (T->parent == T)
+			return T;
+		else
+			T = T->parent;
+	}
+}
+
+void mergeregions(tree *x, tree *y)
+{
+	tree *root1 = findroot(x);
+	tree *root2 = findroot(y);
+	if (x->weight < y->weight)
+	{
+		root1->parent = root2;
+		root2-> weight += root1->weight;
+	}
+	else
+	{
+		root2->parent = root1;
+		root1-> weight += root2->weight;		
+	}
+}
+
+
 int main()
 {
 	int m,n;
