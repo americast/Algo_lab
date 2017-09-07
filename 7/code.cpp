@@ -43,19 +43,30 @@ void printlabyrinth(int **H, int **V,int m,int n)
 	cout<<"+\n";
 }
 
-int main()
+tree** initrooms(int m, int n)
 {
-	int m,n;
-	cin>>m>>n;
-	tree* arr[m][n];
+	tree **arr;
+	arr = new tree *[m];
+	for(int i = 0; i <m; i++)
+	    arr[i] = new tree[n];
+
 	for (int i=0;i<m;i++)
 		for (int j=0;j<n;j++)
 		{
 			tree *T = (tree*)malloc(sizeof(tree));
 			T -> parent = T;
 			T -> weight = 1;
-			arr[i][j]=T;
+			arr[i][j]=*T;
 		}
+	return arr;
+}
+
+int main()
+{
+	int m,n;
+	cin>>m>>n;
+
+	tree **arr = initrooms(m,n);
 
 	int **H,**V;
 	H = new int *[m-1];
