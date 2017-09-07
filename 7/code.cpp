@@ -61,6 +61,18 @@ tree** initrooms(int m, int n)
 	return arr;
 }
 
+tree findroot(tree **arr, int i, int j)
+{
+	tree *T = &(arr[i][j]);
+	while(1)
+	{
+		if (T->parent == T)
+			return *T;
+		else
+			T = T->parent;
+	}
+}
+
 int main()
 {
 	int m,n;
@@ -88,5 +100,6 @@ int main()
 			V[i][j]=1;
 
 	printlabyrinth(H,V,m,n);
+	findroot(arr,1,1);
 
 }
