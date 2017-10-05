@@ -1,3 +1,8 @@
+/* Name: code.cpp
+  Creator: Sayan Sinha (sayan.sinha@iitkgp.ac.in)
+  Date: October 5, 2017
+  Description: Hash tables
+*/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -9,6 +14,11 @@ struct node
 	node* next;
 };
 
+/* Name: exhsearch
+  Input: L, n, A[]
+  Output: k
+  Description: Exhaustively search all possible combinations
+*/
 int exhsearch (int L, int n, int A[], int i=0, int u=0, int v=0)
 {
 	if (i==n || (u+A[i] > L && v+A[i] > L))
@@ -23,7 +33,11 @@ int exhsearch (int L, int n, int A[], int i=0, int u=0, int v=0)
 	else
 		return toreturn_right;
 }
-
+/* Name: ispresent
+  Input: H, s, i, u, v
+  Output: true or false
+  Description: Returns true if the item is present in the hash table, else returns false
+*/
 bool ispresent (node* H[], int s, int i, int u, int v)
 {
 	int index = (7*i + 3*u + 5*v) % s;
@@ -38,6 +52,11 @@ bool ispresent (node* H[], int s, int i, int u, int v)
 	}
 }
 
+/* Name: hashsearch
+  Input: L, n, A[], node* H[]
+  Output: k
+  Description: Hash-based search
+*/
 int hashsearch (int L, int n, int A[], node* H[], int i=0, int u=0, int v=0)
 {
 	int s = n*L;
@@ -84,7 +103,7 @@ int main()
 	cout<<"+++\tExhaustive search\n\tk = "<<k<<"\n\tSearch time = "<<runtime<<" sec"<<endl;
 	int s=n*L;
 	node* H[s];
-	for (int i=0; i<s; i++)
+	for (int i=0; i<s; i++)		//Initialising all elements of hash table to NULL
 		H[i] = NULL;
 
 	c1 = clock();
