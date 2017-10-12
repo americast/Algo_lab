@@ -6,12 +6,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void generate_gpa(int arr[], int n)
+void generate_gpa(int arr[], long long n)
 {
 	float Pr[] = {0.05,0.2,0.3,0.15};
 	for (int i=1;i<4; i++)
 		Pr[i] += Pr[i-1];
-	for (int i=0;i<n;i++)
+	for (long long i=0;i<n;i++)
 	{
 		float y = (float)rand()/RAND_MAX;
 		// Decision tree begins
@@ -32,9 +32,9 @@ void generate_gpa(int arr[], int n)
 	}
 }
 
-int partition(int a[], int l, int r) 
+long long partition(int a[], long long l, long long r) 
 { 
-	int pivot, i, j, t; 
+	long long pivot, i, j, t; 
 	pivot = a[l]; 
 	i = l; 
 	j = r+1; 
@@ -60,36 +60,51 @@ int partition(int a[], int l, int r)
 	return j; 
 } 
 
-void qsort(int a[], int l,int r) 
+/* Name: quicksort
+  Input: array, left, right
+  Output: <none>
+  Description: Quick sort
+*/
+void qsort(int a[], long long l,long long r) 
 { 
-	int j; 
+	long long j; 
 	if(l < r) 
-	{ // divide and conquer 
+	{
+		// divide and conquer 
 		j = partition( a, l, r); 
 		qsort(a, l, j-1); 
 		qsort(a, j+1, r); 
 	}
 }
 
-
-void countingsort1(int cg[], int n)
+/* Name: countingsort1
+  Input: cg, n
+  Output: <none>
+  Description: Stable counting sort
+*/
+void countingsort1(int cg[], long long n)
 {
 	int C[501]={0}, *B;
 	B = (int *) malloc(n*sizeof(int));
-	for (int i=0; i<n; i++)
+	for (long long i=0; i<n; i++)
 		C[cg[i]]++;
 	for (int i=1; i<501; i++)
 		C[i] += C[i-1];
-	for (int i=0;i<n;i++)
+	for (long long i=0;i<n;i++)
 		B[(C[cg[i]]--)-1] = cg[i];
-	for (int i=0; i<n; i++)
+	for (long long i=0; i<n; i++)
 		cg[i] = B[i];
 }
 
-void countingsort2(int cg[], int n)
+/* Name: countingsort2
+  Input: cg, n
+  Output: <none>
+  Description: Ubstable counting sort
+*/
+void countingsort2(int cg[], long long n)
 {
 	int C[501]={0}, k=0;
-	for (int i=0; i<n; i++)
+	for (long i=0; i<n; i++)
 		C[cg[i]]++;
 	for (int i=0; i<501; i++)
 		if (C[i]-->0)
@@ -99,10 +114,15 @@ void countingsort2(int cg[], int n)
 		}
 }
 
-int* copy(int cg[], int n)
+/* Name: copy
+  Input: cg, n
+  Output: <none>
+  Description: copy an array elements into another array
+*/
+int* copy(int cg[], long long n)
 {
 	int *cgpa = (int *) malloc(n* sizeof(int));
-	for (int i=0;i<n;i++)
+	for (long long i=0;i<n;i++)
 		cgpa[i] = cg[i];
 	return cgpa;
 }
@@ -110,16 +130,31 @@ int* copy(int cg[], int n)
 int main()
 {
 	srand(time(NULL));
-	int n;
+	long long n;
 	cin>>n;
+	cout<<"\nn = "<<n;
 	int cg[n];
+	clock_t c1, c2;
+	c1 = clock();
 	generate_gpa(cg, n);
+	c2 = clock();
+	cout<<"\n+++ Array generation time\t=\t"<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<" sec";
 	int *cg2, *cg3;
 	cg2 = copy(cg, n);
 	cg3 = copy(cg, n);
+	c1 = clock();
 	qsort(cg, 0, n-1);
+	c2 = clock();
+	cout<<"\n+++ Quick sort time\t\t=\t"<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<" sec";
+	c1 = clock();
 	countingsort1(cg2, n);
+	c2 = clock();
+	cout<<"\n+++ Counting sort 1 time\t=\t"<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<" sec";
+	c1 = clock();
 	countingsort2(cg3, n);
-	for (int i=0; i<n; i++)
-		cout<<cg[i]<<endl;
+	c2 = clock();
+	cout<<"\n+++ Counting sort 2 time\t=\t"<<(double)(c2 - c1) / (double)CLOCKS_PER_SEC<<" sec"<<endl;
+	// cout<<"\n"<<n<<endl;
+// 	for (int i=0;i<n;i++)
+// 		cout<<cg[i]<<"  ";
 }
