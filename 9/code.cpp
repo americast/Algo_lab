@@ -32,6 +32,46 @@ void generate_gpa(int arr[], int n)
 	}
 }
 
+int partition(int a[], int l, int r) 
+{ 
+	int pivot, i, j, t; 
+	pivot = a[l]; 
+	i = l; 
+	j = r+1; 
+	while(1) 
+	{ 
+		do 
+		{
+			++i; 
+		} while(a[i]<=pivot && i<=r); 
+		do
+		{
+			--j; 
+		} while( a[j] > pivot ); 
+		if( i>= j ) 
+			break; 
+		t= a[i]; 
+		a[i] = a[j]; 
+		a[j] = t; 
+	} 
+	t = a[l]; 
+	a[l] = a[j]; 
+	a[j] = t; 
+	return j; 
+} 
+
+void qsort(int a[], int l,int r) 
+{ 
+	int j; 
+	if(l < r) 
+	{ // divide and conquer 
+		j = partition( a, l, r); 
+		qsort(a, l, j-1); 
+		qsort(a, j+1, r); 
+	}
+}
+
+
 void countingsort1(int cg[], int n)
 {
 	int C[501]={0}, *B;
@@ -77,8 +117,9 @@ int main()
 	int *cg2, *cg3;
 	cg2 = copy(cg, n);
 	cg3 = copy(cg, n);
+	qsort(cg, 0, n-1);
 	countingsort1(cg2, n);
 	countingsort2(cg3, n);
 	for (int i=0; i<n; i++)
-		cout<<cg3[i]<<endl;
+		cout<<cg[i]<<endl;
 }
