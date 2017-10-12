@@ -1,1 +1,1 @@
-g++ code.cpp && ./a.out
+g++ -g code.cpp && ./a.out
