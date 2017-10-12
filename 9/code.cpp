@@ -32,7 +32,7 @@ void generate_gpa(int arr[], int n)
 	}
 }
 
-int* countingsort1(int cg[], int n)
+void countingsort1(int cg[], int n)
 {
 	int C[501]={0}, *B;
 	B = (int *) malloc(n*sizeof(int));
@@ -42,7 +42,29 @@ int* countingsort1(int cg[], int n)
 		C[i] += C[i-1];
 	for (int i=0;i<n;i++)
 		B[(C[cg[i]]--)-1] = cg[i];
-	return B;
+	for (int i=0; i<n; i++)
+		cg[i] = B[i];
+}
+
+void countingsort2(int cg[], int n)
+{
+	int C[501]={0}, k=0;
+	for (int i=0; i<n; i++)
+		C[cg[i]]++;
+	for (int i=0; i<501; i++)
+		if (C[i]-->0)
+		{
+			cg[k] = i;
+			i--; k++;
+		}
+}
+
+int* copy(int cg[], int n)
+{
+	int *cgpa = (int *) malloc(n* sizeof(int));
+	for (int i=0;i<n;i++)
+		cgpa[i] = cg[i];
+	return cgpa;
 }
 
 int main()
@@ -52,7 +74,11 @@ int main()
 	cin>>n;
 	int cg[n];
 	generate_gpa(cg, n);
-	int *B = countingsort1(cg, n);
+	int *cg2, *cg3;
+	cg2 = copy(cg, n);
+	cg3 = copy(cg, n);
+	countingsort1(cg2, n);
+	countingsort2(cg3, n);
 	for (int i=0; i<n; i++)
-		cout<<B[i]<<endl;
+		cout<<cg3[i]<<endl;
 }
