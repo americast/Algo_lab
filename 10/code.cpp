@@ -62,6 +62,49 @@ pair<int,int> exhsubseq(char *S, char *T)
 	return make_pair(begin,k);
 }
 
+int dnc2(char *S, char *T, int s)
+{
+	int n = strlen(S);
+	int m = strlen(T);
+	if (n < 2*m)
+		if (issubseq(S,T)>-1)
+			return 1;
+		else
+			return 0;
+	int table[1000], i1=0, i2=0;
+	for (int i = 0; i<s; i++)
+		table[i] = 0;
+	char S_1[1000];
+	for (int i=0; i<n; i++)
+	{
+		int here = S[i] - 'a';
+		if (table[here] % 2 == 0)
+			S_1[i1++] = S[i];
+		table[here]++;
+	}
+	S_1[i1] = '\0';
+	// cout<<"S1: "<<S_1<<"\nS2: "<<S_2<<endl;
+	if (strlen(S_1) == n)
+		return exhsubseq(S_1,T).second;
+	int k = dnc2(S_1,T,s);
+	k *= 2;
+	k++;
+	char *Tk;
+	Tk = repsymbols(T, k);
+	// Tk[m*k]='\0';
+	if (issubseq(S, Tk)>-1)
+		return k;
+	k--;
+	Tk = repsymbols(T,k);
+	// Tk[m*k]='\0';
+	if (issubseq(S, Tk)>-1)
+		return k;
+	if (k == 0)
+		return 0;
+	else
+		return --k;
+}
+
 int dnc1(char *S, char *T, int s)
 {
 	int n = strlen(S);
@@ -137,6 +180,9 @@ int main()
 	cout<<k<<endl;
 	cout<<"\n+++ Divide and Conquer Strategy 1\n\tk = ";
 	k = dnc1(S,T,s);
+	cout<<k<<endl;
+	cout<<"\n+++ Divide and Conquer Strategy 2\n\tk = ";
+	k = dnc2(S,T,s);
 	cout<<k<<endl;
 	cout<<"+++ The subsequence is:\n";
 	cout<<S<<endl;
