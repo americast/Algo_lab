@@ -21,7 +21,6 @@ int issubseq(char *S, char *T)
 	{
 		if (S[i]==T[j])
 		{
-			// cout<<"\nhere "<<S[i]<<endl;
 			if (begin==-1)
 				begin = i;
 			j++;
@@ -32,6 +31,11 @@ int issubseq(char *S, char *T)
 	return -1;
 }
 
+/* Name: repsymbols
+  Input: T, k
+  Output: Tk (The position where the subsequence starts)
+  Description: To return the repeat sequence of T, k times
+*/
 char* repsymbols(char *T, int k)
 {
 	int m = strlen(T),pos = 0;
@@ -40,12 +44,15 @@ char* repsymbols(char *T, int k)
 	for (int i=0; i<m; i++)
 		for (int j=0; j<k; j++)
 			Tk[pos++] = T[i];
-	// cout<<Tk;
-	// cout<<"\nm*k "<<m*k<<" pos= "<<pos<<endl;
 	Tk[pos] = '\0';
 	return Tk;
 }
 
+/* Name: exhsubseq
+  Input: S, T
+  Output: begin, k
+  Description: To exhaustively search for subsequence. Returns the beginning of the subsequence and the max possible k
+*/
 pair<int,int> exhsubseq(char *S, char *T)
 {
 	int n = strlen(S), m = strlen(T), begin;
@@ -62,6 +69,11 @@ pair<int,int> exhsubseq(char *S, char *T)
 	return make_pair(begin,k);
 }
 
+/* Name: dnc2
+  Input: S, T, s
+  Output: k
+  Description: Divide and Conquer algo 2 which runs in linear time
+*/
 int dnc2(char *S, char *T, int s)
 {
 	int n = strlen(S);
@@ -83,20 +95,17 @@ int dnc2(char *S, char *T, int s)
 		table[here]++;
 	}
 	S_1[i1] = '\0';
-	// cout<<"S1: "<<S_1<<"\nS2: "<<S_2<<endl;
 	if (strlen(S_1) == n)
 		return exhsubseq(S_1,T).second;
 	int k = dnc2(S_1,T,s);
 	k *= 2;
-	k++;
+	k++;	// making k = 2k + 1 and checking till k = 2k - 1
 	char *Tk;
 	Tk = repsymbols(T, k);
-	// Tk[m*k]='\0';
 	if (issubseq(S, Tk)>-1)
 		return k;
 	k--;
 	Tk = repsymbols(T,k);
-	// Tk[m*k]='\0';
 	if (issubseq(S, Tk)>-1)
 		return k;
 	if (k == 0)
@@ -105,6 +114,11 @@ int dnc2(char *S, char *T, int s)
 		return --k;
 }
 
+/* Name: dnc1
+  Input: S, T, s
+  Output: k
+  Description: Divide and Conquer algo 1 which runs in O(n log n) time
+*/
 int dnc1(char *S, char *T, int s)
 {
 	int n = strlen(S);
@@ -152,6 +166,11 @@ int dnc1(char *S, char *T, int s)
 		return --k;
 }
 
+/* Name: prnsubseq
+  Input: S, T, begin
+  Output: <none>
+  Description: Print the subsequence
+*/
 void prnsubseq(char *S, char *T, int begin)
 {
 	int n = strlen(S);
@@ -168,26 +187,23 @@ void prnsubseq(char *S, char *T, int begin)
 
 int main()
 {
-	// char a[] = "abc";
-	// repsymbols(a,2);
-	// exit(0);
 	int s;
 	char S[1000], T[1000];
 	cin>>s>>S>>T;
-	cout<<"+++ Exhaustive search\n\tk = ";
+	cout<<"+++\tExhaustive search\n\tk = ";
 	pair<int,int> now = exhsubseq(S, T);
 	int begin = now.first, k = now.second;
 	cout<<k<<endl;
-	cout<<"\n+++ Divide and Conquer Strategy 1\n\tk = ";
+	cout<<"\n+++\tDivide and Conquer Strategy 1\n\tk = ";
 	k = dnc1(S,T,s);
 	cout<<k<<endl;
-	cout<<"\n+++ Divide and Conquer Strategy 2\n\tk = ";
+	cout<<"\n+++\tDivide and Conquer Strategy 2\n\tk = ";
 	k = dnc2(S,T,s);
-	cout<<k<<endl;
-	cout<<"+++ The subsequence is:\n";
-	cout<<S<<endl;
+	cout<<k<<endl<<endl;
+	cout<<"+++\tThe subsequence is:\n";
+	cout<<"\t"<<S<<endl<<"\t";
 	char *Tk = repsymbols(T, k);
 	prnsubseq(S,Tk, begin);
-	cout<<endl;
+	cout<<endl<<endl;
 
 }
