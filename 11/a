@@ -1,0 +1,56 @@
+void dfs(int stack[], int &top, int &curr_serial_no, int n, int u, header_ *header, int &count, int parent_subgroup_no[])
+{
+    // cout<<"u = "<<u<<" curr_serial_no = "<<curr_serial_no<<endl;
+    stack[++top] = u;
+    header[u].flag=1;
+    header[u].serial_no = curr_serial_no;
+    header[u].low_number = header[u].serial_no;
+    curr_serial_no++;
+    header[u].low_number = header[u].serial_no;
+ 
+    Adjnode *temp = header[u].list;
+ 
+    while(temp!=NULL)
+    {
+        int v = temp->vertex;
+        if(header[v].serial_no==-1)
+        {
+            dfs(stack, top, curr_serial_no, n, v, header, count, parent_subgroup_no);
+            if(header[v].low_number < header[u].low_number)
+                header[u].low_number = header[v].low_number;
+        }
+        else
+        {
+            if(header[v].flag==1) //in stack
+            {
+                if(header[v].serial_no < header[u].low_number)
+                {
+                    header[u].low_number = header[v].serial_no;
+                }
+            }
+        }
+        temp = temp->next;
+    }
+ 
+    if(header[u].serial_no == header[u].low_number)
+    {
+        cout<<"\n--- Subgroup "<<count++<<": ";
+        int v = stack[top];
+ 
+        cout<<v<<" ";
+        parent_subgroup_no[v] = count-1;
+        while(v!=u)
+        {
+            top--;
+            header[v].flag = 0;
+            v = stack[top];
+            cout<<v<<" ";
+            parent_subgroup_no[v] = count-1;
+        }
+        top--;
+        header[v].flag = 0;
+ 
+        cout<<endl;
+    }
+ 
+}
